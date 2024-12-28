@@ -10,11 +10,10 @@ def load_raw_data(file_name):
     return pd.read_csv(file_path)
 
 def filter_countries(data, countries):
-    return data[data['Country Name'].isin(countries)]
+    return data[data['Entity'].isin(countries)]
 
-def filter_years(data):
-    year_columns = [str(year) for year in range(1970, 2021, 5)]
-    return data[['Country Name'] + year_columns]
+def filter_years(data, start_year=1960, end_year=2022):
+    return data[(data['Year'] >= start_year) & (data['Year'] <= end_year)]
 
 def remove_columns(data, columns):
     return data.drop(columns=columns)
@@ -25,9 +24,16 @@ def clean_columns(data):
 
 if __name__ == "__main__":
     # Example usage
-    raw_data = load_raw_data('temperature_data.csv')
+    raw_data = load_raw_data('co2_emissions.csv')
     raw_data = clean_columns(raw_data)
-    filtered_data = filter_countries(raw_data, ['Algeria', 'Morocco'])
-    filtered_data = remove_columns(filtered_data, ['Unit'])
+    
+    # Filter for Morocco and Algeria
+    filtered_data = filter_countries(raw_data, ['Morocco', 'Algeria'])
+    
+    # Filter for years from 1960 to 2022
     filtered_data = filter_years(filtered_data)
+    
+    # Remove unnecessary columns
+    filtered_data = remove_columns(filtered_data, ['Code'])  # Code column is not needed
+    
     print(filtered_data.head())

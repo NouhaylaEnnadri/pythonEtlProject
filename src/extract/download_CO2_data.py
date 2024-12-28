@@ -20,9 +20,8 @@ def download_co2_data():
 df, metadata = download_co2_data()
 
 
-
 # Define the path where the data will be saved
-save_path = '../../data/raw/co2_emissions.csv'
+save_path = 'C:/Users/SWIFT 3/pythonEtlProject/data/raw/co2_emissions.csv'
 
 # Check if the directory exists, if not, create it
 os.makedirs(os.path.dirname(save_path), exist_ok=True)
