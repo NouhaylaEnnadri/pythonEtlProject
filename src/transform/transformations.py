@@ -1,22 +1,17 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 import os
 
 # Path to the raw data folder
 RAW_DATA_PATH = os.path.join('data', 'raw')
 PROCESSED_DATA_PATH = os.path.join('data', 'processed')
 
+# Load the data (already filtered for Algeria and Morocco)
 def load_raw_data(file_name):
     file_path = os.path.join(RAW_DATA_PATH, file_name)
     if not os.path.exists(file_path):
         raise FileNotFoundError(f"{file_name} not found in {RAW_DATA_PATH}")
     return pd.read_csv(file_path)
-
-def remove_columns(data):
-    # Remove unwanted columns
-    columns_to_drop = ['Iso2', 'Iso3', 'Indicator', 'Unit', 'Source', 
-                       'Cts_Code', 'Cts_Name', 'Cts_Full_Descriptor']
-    data = data.drop(columns=columns_to_drop, errors='ignore')
-    return data
 
 def filter_countries(data, countries):
     # Filter rows for the specified countries (e.g., Algeria and Morocco)
@@ -29,32 +24,27 @@ def filter_years(data):
     data = data[['Country'] + year_columns]  # Include 'Country' and year columns
     return data
 
-def remove_duplicates(data):
-    before = data.shape[0]
-    data = data.drop_duplicates()
-    after = data.shape[0]
-    print(f"Removed {before - after} duplicate rows.")
-    return data
+def plot_country_data(country_data, country_name, years):
+    # Plot only the data for the years specified
+    plt.plot(years, country_data[years].iloc[0, :], label=country_name)
 
-def handle_missing_values(data):
-    # Display columns with missing data
-    missing = data.isnull().sum()
-    print(f"Missing values:\n{missing[missing > 0]}")
-
-    # Example: Fill missing values in a specific column with the mean
-    if 'Indicator Value' in data.columns:
-        data['Indicator Value'] = data['Indicator Value'].fillna(data['Indicator Value'].mean())
-
-    # Drop rows with missing essential columns
-    data = data.dropna(subset=['Country'])
-    print(f"Remaining missing values:\n{data.isnull().sum().sum()}")
-    return data
-
-def save_cleaned_data(data, file_name):
-    os.makedirs(PROCESSED_DATA_PATH, exist_ok=True)
-    file_path = os.path.join(PROCESSED_DATA_PATH, file_name)
-    data.to_csv(file_path, index=False)
-    print(f"Cleaned data saved to {file_path}")
+def plot_combined_data(morocco_data, algeria_data, years):
+    plt.figure(figsize=(10, 6))
+    plt.title("Comparison of Algeria and Morocco: Climate Change Indicators (1961-2022)")
+    plt.xlabel("Year")
+    plt.ylabel("Indicator Value")
+    
+    # Plot Morocco
+    plot_country_data(morocco_data, 'Morocco', years)
+    
+    # Plot Algeria
+    plot_country_data(algeria_data, 'Algeria', years)
+    
+    # Show the graph with legend
+    plt.legend()
+    plt.grid(True)
+    plt.xticks(years)  # Set x-ticks to the years every 5 years
+    plt.show()
 
 if __name__ == "__main__":
     # Load raw data
@@ -63,24 +53,40 @@ if __name__ == "__main__":
     # Clean up column names (strip spaces and standardize case)
     raw_data.columns = raw_data.columns.str.strip().str.title()
     
-    # Print the columns to check if 'Country' exists
-    print("Columns in dataset:", raw_data.columns)
-
     # Filter for the specified countries (Algeria and Morocco)
     filtered_data = filter_countries(raw_data, ['Algeria', 'Morocco'])
     
     # Filter for the required columns (Year columns only)
     filtered_data = filter_years(filtered_data)
     
-    # Remove unwanted columns
-    filtered_data = remove_columns(filtered_data)
+    # Split the data by country
+    morocco_data = filtered_data[filtered_data['Country'] == 'Morocco']
+    algeria_data = filtered_data[filtered_data['Country'] == 'Algeria']
     
-    # Apply transformations
-    filtered_data = remove_duplicates(filtered_data)
-    filtered_data = handle_missing_values(filtered_data)
+    # Define the years to display (every 5 years)
+    years = [f'F{i}' for i in range(1961, 2023, 5)]  # This will give ['F1961', 'F1966', ..., 'F2021']
     
-    # Display the final filtered and cleaned data
-    print("Filtered and cleaned data:\n", filtered_data.head())  # Display first 5 rows for preview
-    
-    # Optionally: Save the cleaned data
-    save_cleaned_data(filtered_data, 'climate_change_indicators_cleaned.csv')
+    # Plot the individual data for each country (Morocco)
+    plt.figure(figsize=(10, 6))
+    plt.title("Climate Change Indicators in Morocco (1961-2022)")
+    plt.xlabel("Year")
+    plt.ylabel("Indicator Value")
+    plt.plot(years, morocco_data[years].iloc[0, :], label="Morocco", color='b')
+    plt.xticks(years)  # Set x-ticks to the years every 5 years
+    plt.grid(True)
+    plt.legend()
+    plt.show()
+
+    # Plot the individual data for each country (Algeria)
+    plt.figure(figsize=(10, 6))
+    plt.title("Climate Change Indicators in Algeria (1961-2022)")
+    plt.xlabel("Year")
+    plt.ylabel("Indicator Value")
+    plt.plot(years, algeria_data[years].iloc[0, :], label="Algeria", color='g')
+    plt.xticks(years)  # Set x-ticks to the years every 5 years
+    plt.grid(True)
+    plt.legend()
+    plt.show()
+
+    # Plot the combined data for both countries
+    plot_combined_data(morocco_data, algeria_data, years)
