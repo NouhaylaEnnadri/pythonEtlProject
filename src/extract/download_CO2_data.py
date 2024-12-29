@@ -16,9 +16,21 @@ def download_co2_data():
     # Return the data and metadata
     return df, metadata
 
+def load_raw_data(file_path):
+    # Load the CO2 dataset from a CSV file
+    return pd.read_csv(file_path)
+
+def filter_countries(data, countries):
+    # Filter the data for the specified countries
+    return data[data['Entity'].isin(countries)]
+
+def filter_years(data, start_year, end_year):
+    # Filter the data for the years between start_year and end_year
+    years = [str(year) for year in range(start_year, end_year + 1)]
+    return data[['Entity', 'Code'] + years]
+
 # Run the function to fetch the data
 df, metadata = download_co2_data()
-
 
 # Define the path where the data will be saved
 save_path = 'C:/Users/SWIFT 3/pythonEtlProject/data/raw/co2_emissions.csv'
