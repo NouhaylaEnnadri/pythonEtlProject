@@ -5,7 +5,7 @@ import seaborn as sns
 def plot_country_data(country_data, country_name, years):
     print(f"Available years in {country_name}: {country_data.index}")  # Debugging line to check available years
     # Ensure the years are in the correct format for selection
-    country_data_for_years = country_data.loc[years.astype(str)].values
+    country_data_for_years = country_data.loc[years].values
     plt.plot(years, country_data_for_years, label=country_name)
 
 def plot_combined_data(morocco_data, algeria_data, years):
@@ -49,7 +49,7 @@ if __name__ == "__main__":
     clean_health_data = pd.read_csv('C:/Users/SWIFT 3/pythonEtlProject/data/processed/clean_health_data.csv', index_col=0)
     
     # Define years from 1960 to 2022 with a step of 5 years
-    years = list(range(1960, 2023, 5))
+    years = [str(year) for year in range(1960, 2023, 5)]
     
     # Extract data for Morocco and Algeria as Series
     morocco_data = clean_health_data.loc['Morocco']
