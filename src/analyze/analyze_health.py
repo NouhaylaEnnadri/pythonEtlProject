@@ -10,7 +10,7 @@ def plot_country_data(country_data, country_name, years):
 
 def plot_combined_data(morocco_data, algeria_data, years):
     plt.figure(figsize=(10, 6))
-    plt.title("Comparison of Algeria and Morocco: Under-five Mortality Rate (1960-2022)")
+    plt.title("Comparison of Algeria and Morocco: Under-five Mortality Rate (1970-2020)")
     plt.xlabel("Year")
     plt.ylabel("Under-five Mortality Rate (Deaths per 100 live births)")
     plot_country_data(morocco_data, 'Morocco', years)
@@ -49,7 +49,7 @@ if __name__ == "__main__":
     clean_health_data = pd.read_csv('C:/Users/SWIFT 3/pythonEtlProject/data/processed/clean_health_data.csv', index_col=0)
     
     # Define years from 1960 to 2022 with a step of 5 years
-    years = [str(year) for year in range(1960, 2023, 5)]
+    years = [str(year) for year in range(1970, 2020, 5)]
     
     # Extract data for Morocco and Algeria as Series
     morocco_data = clean_health_data.loc['Morocco']
