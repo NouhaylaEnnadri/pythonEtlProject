@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
-from src.extract.download_CO2_data import load_raw_data, filter_countries, filter_years
+from extract.extract_CO2_data import load_raw_data, filter_countries, filter_years
 import sys
 import os
 
