@@ -14,7 +14,7 @@ def clean_health_data(file_path, countries=None):
         filtered_data = health_data  # Include all countries if no filter is applied
     
     # Filter for years between 1960 and 2022
-    filtered_data = filtered_data[(filtered_data['Year'] >= 1960) & (filtered_data['Year'] <= 2022)]
+    filtered_data = filtered_data[(filtered_data['Year'] >= 1970) & (filtered_data['Year'] <= 2020)]
     
     # Pivot the data to get countries as rows and years as columns
     pivoted_data = filtered_data.pivot(index='Entity', columns='Year', values='Observation value - Indicator: Under-five mortality rate - Sex: Total - Wealth quintile: Total - Unit of measure: Deaths per 100 live births')

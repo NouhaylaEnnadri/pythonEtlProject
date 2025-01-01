@@ -1,6 +1,12 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
+import sys
+import os
+
+# Add the src directory to the path
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
+
 from src.transform.transformations_temp import load_raw_data, filter_countries, remove_columns, filter_years
 
 def plot_country_data(country_data, country_name, years):
@@ -8,7 +14,7 @@ def plot_country_data(country_data, country_name, years):
 
 def plot_combined_data(morocco_data, algeria_data, years):
     plt.figure(figsize=(10, 6))
-    plt.title("Comparison of Algeria and Morocco: Temperature Indicators (1961-2022)")
+    plt.title("Comparison of Algeria and Morocco: Temperature Indicators (1970-2020)")
     plt.xlabel("Year")
     plt.ylabel("Indicator Value")
     plot_country_data(morocco_data, 'Morocco', years)

@@ -2,6 +2,7 @@ import pandas as pd
 import os
 
 RAW_DATA_PATH = os.path.join('data', 'raw')
+PROCESSED_DATA_PATH = os.path.join('data', 'processed')
 
 def load_raw_data(file_name):
     file_path = os.path.join(RAW_DATA_PATH, file_name)
@@ -13,7 +14,7 @@ def filter_countries(data, countries):
     return data[data['Country Name'].isin(countries)]
 
 def filter_years(data):
-    year_columns = [str(year) for year in range(1970, 2021, 5)]
+    year_columns = [str(year) for year in range(1970, 2020, 5)]
     return data[['Country Name'] + year_columns]
 
 def remove_columns(data, columns):
@@ -23,11 +24,17 @@ def clean_columns(data):
     data.columns = data.columns.str.strip().str.title()
     return data
 
-if __name__ == "__main__":
-    # Example usage
-    raw_data = load_raw_data('temperature_data.csv')
+def process_temperature_data(input_file, output_file):
+    raw_data = load_raw_data(input_file)
     raw_data = clean_columns(raw_data)
     filtered_data = filter_countries(raw_data, ['Algeria', 'Morocco'])
-    filtered_data = remove_columns(filtered_data, ['Unit'])
+    filtered_data = remove_columns(filtered_data, ['Unit', 'Change'])
     filtered_data = filter_years(filtered_data)
-    print(filtered_data.head())
+    os.makedirs(os.path.dirname(output_file), exist_ok=True)
+    filtered_data.to_csv(output_file, index=False)
+
+if __name__ == "__main__":
+    input_file = 'temperature_data.csv'
+    output_file = os.path.join(PROCESSED_DATA_PATH, 'clean_temp.csv')
+    process_temperature_data(input_file, output_file)
+    print(f"Processed data saved to {output_file}")

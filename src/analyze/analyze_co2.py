@@ -18,7 +18,7 @@ def plot_country_data(country_data, country_name, years):
 
 def plot_combined_data(morocco_data, algeria_data, years):
     plt.figure(figsize=(10, 6))
-    plt.title("Comparison of Algeria and Morocco: CO2 Emissions (1960-2022)")
+    plt.title("Comparison of Algeria and Morocco: CO2 Emissions (1970-2020)")
     plt.xlabel("Year")
     plt.ylabel("CO2 Emissions (Million Tonnes)")
     plot_country_data(morocco_data, 'Morocco', years)
@@ -57,7 +57,7 @@ if __name__ == "__main__":
     raw_data.columns = raw_data.columns.str.strip()
 
     filtered_data = filter_countries(raw_data, ['Morocco', 'Algeria'])
-    filtered_data = filter_years(filtered_data, 1960, 2022)
+    filtered_data = filter_years(filtered_data, 1970, 2020)
 
     pivoted_data = pivot_data(filtered_data)
 
@@ -67,8 +67,8 @@ if __name__ == "__main__":
     morocco_data = pivoted_data.loc['Morocco']
     algeria_data = pivoted_data.loc['Algeria']
 
-    # Define years from 1960 to 2022 with a step of 5 years
-    years = list(range(1960, 2023, 5))
+    # Define years from 1970 to 2022 with a step of 5 years
+    years = list(range(1970, 2020, 5))
 
     plot_combined_data(morocco_data, algeria_data, years)
     plot_scatter_plot(morocco_data, algeria_data, years)

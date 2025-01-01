@@ -20,7 +20,7 @@ def filter_countries(data, countries):
 
 def filter_years(data):
     # Extract columns for years from F1961 to F2022
-    year_columns = [f'F{i}' for i in range(1961, 2023)]
+    year_columns = [f'F{i}' for i in range(1970, 2020)]
     data = data[['Country'] + year_columns]  # Include 'Country' and year columns
     return data
 

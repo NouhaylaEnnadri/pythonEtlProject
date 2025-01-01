@@ -11,7 +11,7 @@ def plot_country_data(country_data, country_name, years):
 
 def plot_combined_data(morocco_data, algeria_data, years):
     plt.figure(figsize=(10, 6))
-    plt.title("Comparison of Algeria and Morocco: Climate Change Indicators (1961-2022)")
+    plt.title("Comparison of Algeria and Morocco: Climate Change Indicators (1970-2020)")
     plt.xlabel("Year")
     plt.ylabel("Indicator Value")
     plot_country_data(morocco_data, 'Morocco', years)
@@ -63,7 +63,7 @@ if __name__ == "__main__":
     algeria_data = filtered_data[filtered_data['Country'] == 'Algeria']
     
     # Define the years to display (every 5 years)
-    years = [f'F{i}' for i in range(1961, 2023, 5)]  # This will give ['F1961', 'F1966', ..., 'F2021']
+    years = [f'F{i}' for i in range(1970, 2020, 5)]  # This will give ['F1961', 'F1966', ..., 'F2021']
     
     # Plot combined data for both countries
     plot_combined_data(morocco_data, algeria_data, years)
